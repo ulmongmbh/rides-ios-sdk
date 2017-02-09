@@ -26,31 +26,31 @@
 import Foundation
 
 @objc internal enum UberButtonColor: Int {
-    case UberBlack
-    case UberWhite
-    case BlackHighlighted
-    case WhiteHighlighted
+    case uberBlack
+    case uberWhite
+    case blackHighlighted
+    case whiteHighlighted
 }
 
-private func hexCodeFromColor(color: UberButtonColor) -> String {
+private func hexCodeFromColor(_ color: UberButtonColor) -> String {
     switch color {
-    case .UberBlack:
+    case .uberBlack:
         return "09091A"
-    case .UberWhite:
+    case .uberWhite:
         return "C0C0C8"
-    case .BlackHighlighted:
+    case .blackHighlighted:
         return "222231"
-    case .WhiteHighlighted:
+    case .whiteHighlighted:
         return "CDCDD3"
     }
 }
 
 // convert hex color code into UIColor
-internal func uberUIColor(color: UberButtonColor) -> UIColor {
+internal func uberUIColor(_ color: UberButtonColor) -> UIColor {
     let hexCode = hexCodeFromColor(color)
-    let scanner = NSScanner(string: hexCode)
+    let scanner = Scanner(string: hexCode)
     var color: UInt32 = 0;
-    scanner.scanHexInt(&color)
+    scanner.scanHexInt32(&color)
     
     let mask = 0x000000FF
     

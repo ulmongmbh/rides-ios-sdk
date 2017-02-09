@@ -26,18 +26,18 @@
 import Foundation
 
 
-public class RidesClient: NSObject {
+open class RidesClient: NSObject {
     var clientID: String?
     
-    static public let sharedInstance = RidesClient()
+    static open let sharedInstance = RidesClient()
     
-    private override init() {}
+    fileprivate override init() {}
     
-    public func configureClientID(id: String) {
+    open func configureClientID(_ id: String) {
         clientID = id
     }
     
-    public func hasClientID() -> Bool {
+    open func hasClientID() -> Bool {
         return clientID != nil && clientID != "YOUR_CLIENT_ID"
     }
 }

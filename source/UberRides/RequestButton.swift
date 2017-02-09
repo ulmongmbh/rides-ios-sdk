@@ -26,7 +26,7 @@
 import UIKit
 
 // RequestButton implements a button on the touch screen to request a ride.
-public class RequestButton: UIButton {
+open class RequestButton: UIButton {
     var deeplink: RequestDeeplink?
     var contentWidth: CGFloat = 0
     var contentHeight: CGFloat = 0
@@ -41,13 +41,13 @@ public class RequestButton: UIButton {
     required public init?(coder aDecoder: NSCoder) {
         uberImageView = UIImageView()
         uberTitleLabel = UILabel()
-        buttonStyle = .Black
+        buttonStyle = .black
         super.init(coder: aDecoder)
-        setUp(.Black)
+        setUp(.black)
     }
     
     public convenience init() {
-        self.init(colorStyle: .Black)
+        self.init(colorStyle: .black)
     }
     
     // swift-style initializer
@@ -55,15 +55,15 @@ public class RequestButton: UIButton {
         uberImageView = UIImageView()
         uberTitleLabel = UILabel()
         buttonStyle = colorStyle
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         setUp(colorStyle)
     }
     
-    private func setUp(colorStyle: RequestButtonColorStyle) {
+    fileprivate func setUp(_ colorStyle: RequestButtonColorStyle) {
         do {
             try setDeeplink()
-            addTarget(self, action: "uberButtonTapped:", forControlEvents: .TouchUpInside)
-        } catch RequestButtonError.NullClientID {
+            addTarget(self, action: #selector(RequestButton.uberButtonTapped(_:)), for: .touchUpInside)
+        } catch RequestButtonError.nullClientID {
             print("No Client ID attached to the deeplink.")
         } catch let error {
             print(error)
@@ -75,19 +75,19 @@ public class RequestButton: UIButton {
     }
     
     // build and attach a deeplink to the button
-    private func setDeeplink() throws {
+    fileprivate func setDeeplink() throws {
         guard RidesClient.sharedInstance.hasClientID() else {
-            throw RequestButtonError.NullClientID
+            throw RequestButtonError.nullClientID
         }
         
         let clientID = RidesClient.sharedInstance.clientID
-        deeplink = RequestDeeplink(withClientID: clientID!, fromSource: .Button)
+        deeplink = RequestDeeplink(withClientID: clientID!, fromSource: .button)
     }
     
     /**
      Set the user's current location as a default pickup location.
      */
-    public func setPickupLocationToCurrentLocation() {
+    open func setPickupLocationToCurrentLocation() {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setPickupLocationToCurrentLocation()
         }
@@ -101,7 +101,7 @@ public class RequestButton: UIButton {
      - parameter nickname:  Optional pickup location name
      - parameter address:   Optional pickup location address
      */
-    public func setPickupLocation(latitude latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
+    open func setPickupLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setPickupLocation(latitude: latitude, longitude: longitude, nickname: nickname, address: address)
         }
@@ -115,7 +115,7 @@ public class RequestButton: UIButton {
      - parameter nickname:  Optional dropoff location name
      - parameter address:   Optional dropoff location address
      */
-    public func setDropoffLocation(latitude latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
+    open func setDropoffLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setDropoffLocation(latitude: latitude, longitude: longitude, nickname: nickname, address: address)
         }
@@ -127,18 +127,18 @@ public class RequestButton: UIButton {
      
      - parameter productID: Unique identifier of the product to populate in pickup
      */
-    public func setProductID(productID: String) {
+    open func setProductID(_ productID: String) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setProductID(productID)
         }
     }
     
     // add title, image, and sizing configuration
-    private func setContent() {
+    fileprivate func setContent() {
         // add title label
-        let bundle = NSBundle(forClass: RequestButton.self)
+        let bundle = Bundle(for: RequestButton.self)
         uberTitleLabel.text = NSLocalizedString("RequestButton.TitleText", bundle: bundle, comment: "Request button description")
-        uberTitleLabel.font = UIFont.systemFontOfSize(17)
+        uberTitleLabel.font = UIFont.systemFont(ofSize: 17)
         uberTitleLabel.numberOfLines = 1;
         
         // add image
@@ -146,7 +146,7 @@ public class RequestButton: UIButton {
         uberImageView.image = badge
         
         // update content sizes
-        let titleSize = uberTitleLabel!.intrinsicContentSize()
+        let titleSize = uberTitleLabel!.intrinsicContentSize
         contentWidth += titleSize.width + badge.size.width
         contentHeight = max(titleSize.height, badge.size.height)
         
@@ -159,13 +159,13 @@ public class RequestButton: UIButton {
     }
     
     // get image from media directory
-    private func getImage(name: String) -> UIImage {
-        let bundle = NSBundle(forClass: RequestButton.self)
-        let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: nil)
+    fileprivate func getImage(_ name: String) -> UIImage {
+        let bundle = Bundle(for: RequestButton.self)
+        let image = UIImage(named: name, in: bundle, compatibleWith: nil)
         return image!
     }
     
-    private func setConstraints() {
+    fileprivate func setConstraints() {
         addSubview(uberImageView)
         addSubview(uberTitleLabel)
         
@@ -178,12 +178,12 @@ public class RequestButton: UIButton {
         uberTitleLabel?.translatesAutoresizingMaskIntoConstraints = false
         
         // prioritize constraints
-        uberTitleLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, forAxis: .Horizontal)
+        uberTitleLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, for: .horizontal)
         
         // create layout constraints
-        let horizontalConstraint: NSArray = NSLayoutConstraint.constraintsWithVisualFormat("H:|-padding-[image(24)]-padding-[label]-padding-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: views)
-        let imageVerticalViewConstraint: NSArray = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[image(24)]-|", options: NSLayoutFormatOptions.AlignAllLeading, metrics: nil, views: views)
-        let labelVerticalViewConstraint: NSArray = NSLayoutConstraint.constraintsWithVisualFormat("V:|-padding-[label]-padding-|", options: NSLayoutFormatOptions.AlignAllLeading, metrics: metrics, views: views)
+        let horizontalConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "H:|-padding-[image(24)]-padding-[label]-padding-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: views) as NSArray
+        let imageVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-[image(24)]-|", options: NSLayoutFormatOptions.alignAllLeading, metrics: nil, views: views) as NSArray
+        let labelVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-padding-[label]-padding-|", options: NSLayoutFormatOptions.alignAllLeading, metrics: metrics, views: views) as NSArray
         
         // add layout constraints
         addConstraints(horizontalConstraint as! [NSLayoutConstraint])
@@ -192,47 +192,47 @@ public class RequestButton: UIButton {
     }
     
     // set color scheme, default is black background with white font
-    private func setColorStyle(style: RequestButtonColorStyle) {
+    fileprivate func setColorStyle(_ style: RequestButtonColorStyle) {
         buttonStyle = style
         
         switch style {
-        case .Black:
-            uberTitleLabel.textColor = uberUIColor(.UberWhite)
-            backgroundColor = uberUIColor(.UberBlack)
-        case .White :
-            uberTitleLabel.textColor = uberUIColor(.UberBlack)
-            backgroundColor = uberUIColor(.UberWhite)
+        case .black:
+            uberTitleLabel.textColor = uberUIColor(.uberWhite)
+            backgroundColor = uberUIColor(.uberBlack)
+        case .white :
+            uberTitleLabel.textColor = uberUIColor(.uberBlack)
+            backgroundColor = uberUIColor(.uberWhite)
         }
     }
     
     // override to maintain fit-to-content size
-    public override func intrinsicContentSize() -> CGSize {
+    open override var intrinsicContentSize : CGSize {
         let width = (3 * padding) + contentWidth
         let height = (2 * padding) + contentHeight
-        return CGSizeMake(width, height)
+        return CGSize(width: width, height: height)
     }
     
     // override to change colors when button is tapped
-    override public var highlighted: Bool {
+    override open var isHighlighted: Bool {
         didSet {
-            if buttonStyle == .Black {
-                if highlighted {
-                    backgroundColor = uberUIColor(.BlackHighlighted)
+            if buttonStyle == .black {
+                if isHighlighted {
+                    backgroundColor = uberUIColor(.blackHighlighted)
                 } else {
-                    backgroundColor = uberUIColor(.UberBlack)
+                    backgroundColor = uberUIColor(.uberBlack)
                 }
-            } else if buttonStyle == .White {
-                if highlighted {
-                    backgroundColor = uberUIColor(.WhiteHighlighted)
+            } else if buttonStyle == .white {
+                if isHighlighted {
+                    backgroundColor = uberUIColor(.whiteHighlighted)
                 } else {
-                    backgroundColor = uberUIColor(.UberWhite)
+                    backgroundColor = uberUIColor(.uberWhite)
                 }
             }
         }
     }
     
     // initiate deeplink when button is tapped
-    public func uberButtonTapped(sender: UIButton) {
+    open func uberButtonTapped(_ sender: UIButton) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.build()
             deeplink!.execute()
@@ -241,10 +241,10 @@ public class RequestButton: UIButton {
 }
 
 @objc public enum RequestButtonColorStyle: Int {
-    case Black
-    case White
+    case black
+    case white
 }
 
-private enum RequestButtonError: ErrorType {
-    case NullClientID
+private enum RequestButtonError: Error {
+    case nullClientID
 }
