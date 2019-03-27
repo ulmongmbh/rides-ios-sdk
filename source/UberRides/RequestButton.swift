@@ -178,12 +178,12 @@ open class RequestButton: UIButton {
         uberTitleLabel?.translatesAutoresizingMaskIntoConstraints = false
         
         // prioritize constraints
-        uberTitleLabel.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, for: .horizontal)
+        uberTitleLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
         
         // create layout constraints
-        let horizontalConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "H:|-padding-[image(24)]-padding-[label]-padding-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: views) as NSArray
-        let imageVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-[image(24)]-|", options: NSLayoutFormatOptions.alignAllLeading, metrics: nil, views: views) as NSArray
-        let labelVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-padding-[label]-padding-|", options: NSLayoutFormatOptions.alignAllLeading, metrics: metrics, views: views) as NSArray
+        let horizontalConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "H:|-padding-[image(24)]-padding-[label]-padding-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: metrics, views: views) as NSArray
+        let imageVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-[image(24)]-|", options: NSLayoutConstraint.FormatOptions.alignAllLeading, metrics: nil, views: views) as NSArray
+        let labelVerticalViewConstraint: NSArray = NSLayoutConstraint.constraints(withVisualFormat: "V:|-padding-[label]-padding-|", options: NSLayoutConstraint.FormatOptions.alignAllLeading, metrics: metrics, views: views) as NSArray
         
         // add layout constraints
         addConstraints(horizontalConstraint as! [NSLayoutConstraint])
@@ -232,7 +232,7 @@ open class RequestButton: UIButton {
     }
     
     // initiate deeplink when button is tapped
-    open func uberButtonTapped(_ sender: UIButton) {
+    @objc open func uberButtonTapped(_ sender: UIButton) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.build()
             deeplink!.execute()
