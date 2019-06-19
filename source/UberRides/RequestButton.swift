@@ -51,7 +51,7 @@ open class RequestButton: UIButton {
     }
     
     // swift-style initializer
-    public init(colorStyle: RequestButtonColorStyle) {
+    @objc public init(colorStyle: RequestButtonColorStyle) {
         uberImageView = UIImageView()
         uberTitleLabel = UILabel()
         buttonStyle = colorStyle
@@ -101,7 +101,7 @@ open class RequestButton: UIButton {
      - parameter nickname:  Optional pickup location name
      - parameter address:   Optional pickup location address
      */
-    open func setPickupLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
+    @objc open func setPickupLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setPickupLocation(latitude: latitude, longitude: longitude, nickname: nickname, address: address)
         }
@@ -115,7 +115,7 @@ open class RequestButton: UIButton {
      - parameter nickname:  Optional dropoff location name
      - parameter address:   Optional dropoff location address
      */
-    open func setDropoffLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
+    @objc open func setDropoffLocation(latitude: Double, longitude: Double, nickname: String? = nil, address: String? = nil) {
         if RidesClient.sharedInstance.hasClientID() {
             deeplink!.setDropoffLocation(latitude: latitude, longitude: longitude, nickname: nickname, address: address)
         }

@@ -29,11 +29,11 @@ import Foundation
 open class RidesClient: NSObject {
     var clientID: String?
     
-    static open let sharedInstance = RidesClient()
+    @objc static public let sharedInstance = RidesClient()
     
     fileprivate override init() {}
     
-    open func configureClientID(_ id: String) {
+    @objc open func configureClientID(_ id: String) {
         clientID = id
     }
     
